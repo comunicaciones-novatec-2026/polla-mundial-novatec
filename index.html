@@ -1063,6 +1063,7 @@ function showParticipant(participantId) {
 
   // Puntos especiales
   const espRow = (DATA.PUNTOS_ESPECIALES || []).find(r => str(r[0]) === pid);
+  const espHtml = buildEspecialesCard(espRow);
 
   /* ── Profile card ── */
   const profileHtml = `
@@ -1093,6 +1094,10 @@ function showParticipant(participantId) {
           <span class="pts-chip">Final <span>${ptFinal}</span></span>
           <span class="pts-chip">Especiales <span>${ptEspecial}</span></span>
         </div>
+      </div>
+      <div class="profile-stat" style="grid-column: 1/-1">
+        <span class="stat-label" style="margin-bottom:10px">⭐ Puntos especiales</span>
+        ${espHtml}
       </div>
     </div>`;
 
@@ -1139,15 +1144,10 @@ function showParticipant(participantId) {
     return `<div id="tab-${ph.key}" class="phase-panel" style="display:${i===0?'block':'none'}">${content}</div>`;
   }).join('');
 
-  /* ── Puntos especiales ── */
-  const espHtml = buildEspecialesCard(espRow);
-
   detail.innerHTML = profileHtml + `
-    <h3 style="font-size:14px;font-weight:700;color:var(--gray);margin-bottom:12px">⚽ Pronósticos por partido</h3>
+    <h3 style="font-size:14px;font-weight:700;color:var(--text-sec);margin-bottom:12px">⚽ Pronósticos por partido</h3>
     <div class="phase-tabs">${tabsHtml}</div>
     ${panelsHtml}
-    <h3 style="font-size:14px;font-weight:700;color:var(--gray);margin:24px 0 12px">⭐ Puntos especiales</h3>
-    ${espHtml}
   `;
 }
 
