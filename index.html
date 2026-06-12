@@ -844,9 +844,10 @@ function renderRanking() {
   const medalEmoji = pos => pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : '';
 
   const rows_html = sorted.map(g => {
-    const nombresHtml = g.nombres
-      .map(n => `<span>${n}</span>`)
-      .join(`<span class="names-separator"> · </span>`);
+    const nombresHtml = [...g.nombres]
+      .sort((a, b) => a.localeCompare(b, 'es'))
+      .map(n => `<div>${n}</div>`)
+      .join('');
     const emoji = medalEmoji(g.posicion);
     return `
       <tr class="${rankClass(g.posicion)}">
