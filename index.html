@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏆 Polla Mundialista Novatec 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Variables ───────────────────────────────────────────── */
+    :root {
+      --orange:     #e7620c;
+      --gold:       #e4b440;
+      --grad:       linear-gradient(135deg, #e7620c, #e4b440);
+      --bg:         #0f0f0f;
+      --bg-alt:     #161616;
+      --bg-card:    rgba(255,255,255,0.05);
+      --bg-card-hov:rgba(255,255,255,0.08);
+      --border:     rgba(255,255,255,0.08);
+      --border-md:  rgba(255,255,255,0.12);
+      --text:       #ffffff;
+      --text-sec:   #9ca3af;
+      --text-body:  #e2e8f0;
+      --shadow:     0 8px 32px rgba(0,0,0,.5);
+      --radius:     14px;
+      --radius-sm:  8px;
+    }
+
+    /* ── Reset ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; max-width: 100%; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-body);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    a { color: var(--orange); text-decoration: none; }
+
+    /* ── Scrollbar ──────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-alt); }
+    ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 3px; }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    header {
+      background: rgba(15,15,15,.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 4px 24px rgba(0,0,0,.5);
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 14px 24px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .logo-wrap img {
+      height: 52px; width: auto;
+      object-fit: contain;
+    }
+    .logo-placeholder {
+      height: 52px; width: 140px;
+      background: var(--bg-card);
+      border: 2px dashed var(--border-md);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--text-sec);
+    }
+    .header-titles { flex: 1; }
+    .header-titles h1 {
+      font-size: clamp(16px, 2.5vw, 22px);
+      font-weight: 800;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    .header-titles p {
+      font-size: 12px; color: var(--text-sec);
+      font-weight: 500; margin-top: 2px;
+    }
+    .header-actions {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 6px;
+    }
+    .btn-refresh {
+      background: var(--grad); color: #fff;
+      border: none; border-radius: 8px;
+      padding: 9px 20px; font-family: inherit;
+      font-weight: 700; font-size: 13px;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+      white-space: nowrap;
+      box-shadow: 0 0 16px rgba(231,98,12,.35);
+    }
+    .btn-refresh:hover { opacity: .88; }
+    .btn-refresh:active { transform: scale(.97); }
+    .btn-refresh:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
+    #last-update { font-size: 11px; color: var(--text-sec); }
+
+    /* ── Decorative stripe ──────────────────────────────────── */
+    .stripe {
+      height: 3px;
+      background: var(--grad);
+    }
+
+    /* ── Main layout ────────────────────────────────────────── */
+    main {
+      max-width: 1200px; margin: 0 auto;
+      padding: 28px 24px 56px;
+      display: flex; flex-direction: column; gap: 32px;
+    }
+
+    /* ── Section card ───────────────────────────────────────── */
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .section-header {
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-header h2 {
+      font-size: 16px; font-weight: 700; color: var(--text);
+    }
+    .section-body { padding: 24px; }
+
+    /* ── Loading / error ────────────────────────────────────── */
+    .loading-wrap {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 48px 24px; gap: 16px; color: var(--text-sec);
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-msg {
+      background: rgba(220,38,38,.12); border: 1px solid rgba(220,38,38,.3);
+      border-radius: 8px; padding: 16px 20px;
+      color: #fca5a5; font-size: 13px;
+    }
+    .empty-msg {
+      text-align: center; color: var(--text-sec);
+      padding: 32px; font-size: 13px;
+    }
+
+    /* ── Ranking table ──────────────────────────────────────── */
+    .ranking-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 13px;
+    }
+    .ranking-table th {
+      background: rgba(255,255,255,.04); color: var(--text-sec);
+      padding: 10px 14px; text-align: left;
+      font-weight: 700; font-size: 11px; letter-spacing: .6px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-md);
+    }
+    .ranking-table td {
+      padding: 11px 14px; border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .ranking-table tr:last-child td { border-bottom: none; }
+    .ranking-table tr:nth-child(even) td { background: rgba(255,255,255,.02); }
+
+    /* Puesto especial */
+    .rank-1 td { background: rgba(228,180,64,.07) !important; }
+    .rank-2 td { background: rgba(180,180,180,.05) !important; }
+    .rank-3 td { background: rgba(231,98,12,.06) !important; }
+
+    /* Número de puesto grande */
+    .rank-pos {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      line-height: 1; gap: 2px;
+    }
+    .rank-pos .rp-emoji { font-size: 18px; }
+    .rank-pos .rp-num   { font-size: 30px; font-weight: 900; line-height: 1; }
+    .rank-1 .rp-num {
+      background: linear-gradient(135deg, #e4b440, #f5c842);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 0 8px rgba(228,180,64,.6));
+    }
+    .rank-2 .rp-num {
+      background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 0 6px rgba(192,192,192,.4));
+    }
+    .rank-3 .rp-num {
+      background: linear-gradient(135deg, #cd7f32, #e8a055);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 0 6px rgba(205,127,50,.4));
+    }
+    .rank-n .rp-num { color: var(--text-sec); font-size: 26px; }
+
+    .names-cell { font-weight: 600; color: var(--text); }
+    .names-separator { color: var(--orange); font-weight: 400; margin: 0 4px; }
+
+    .points-cell { text-align: right; white-space: nowrap; }
+    .pts-val {
+      font-weight: 800; font-size: 15px;
+      background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      display: inline;
+    }
+    .pts-label {
+      font-size: 11px; color: var(--text-sec); margin-left: 3px;
+    }
+
+    /* ── Search / autocomplete ───────────────────────────────── */
+    .search-row { margin-bottom: 24px; }
+
+    .ac-wrap {
+      position: relative;
+      width: 100%; max-width: 480px;
+    }
+    .ac-input-row {
+      display: flex; align-items: center;
+      border: 1.5px solid var(--border-md);
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      transition: border-color .2s;
+      overflow: hidden;
+    }
+    .ac-input-row:focus-within {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(231,98,12,.15);
+    }
+
+    .ac-input {
+      flex: 1; min-height: 46px;
+      padding: 10px 14px;
+      border: none; outline: none;
+      font-family: inherit; font-size: 14px;
+      color: var(--text); background: transparent;
+    }
+    .ac-input::placeholder { color: var(--text-sec); }
+
+    .ac-clear {
+      flex-shrink: 0;
+      width: 36px; height: 46px;
+      border: none; background: transparent;
+      cursor: pointer; display: none;
+      align-items: center; justify-content: center;
+      font-size: 18px; color: var(--text-sec);
+      transition: color .15s;
+      padding: 0;
+    }
+    .ac-clear:hover { color: var(--orange); }
+    .ac-clear.visible { display: flex; }
+
+    .ac-icon {
+      flex-shrink: 0; width: 40px; height: 46px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; color: var(--text-sec); pointer-events: none;
+    }
+
+    .ac-dropdown {
+      position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+      background: #1c1c1c;
+      border: 1px solid var(--border-md);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 16px 40px rgba(0,0,0,.6);
+      max-height: 320px; overflow-y: auto;
+      z-index: 200;
+      display: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .ac-dropdown.open { display: block; }
+
+    .ac-item {
+      padding: 12px 14px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px; line-height: 1.3;
+      transition: background .12s;
+      display: flex; flex-direction: column; gap: 1px;
+    }
+    .ac-item:last-child { border-bottom: none; }
+    .ac-item:hover, .ac-item.focused { background: rgba(231,98,12,.12); }
+    .ac-item-name { font-weight: 600; color: var(--text); }
+    .ac-item-name mark {
+      background: none; color: var(--orange);
+      font-weight: 800; padding: 0;
+    }
+    .ac-item-area { font-size: 12px; color: var(--text-sec); }
+    .ac-empty {
+      padding: 16px 14px;
+      color: var(--text-sec); font-size: 13px;
+      text-align: center;
+    }
+
+    /* Selected state: chip inside input row */
+    .ac-selected-chip {
+      display: none; align-items: center; gap: 8px;
+      flex: 1; padding: 0 14px;
+      font-size: 14px; font-weight: 600; color: var(--text);
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+    }
+    .ac-selected-chip.visible { display: flex; }
+    .ac-selected-chip .chip-name { overflow: hidden; text-overflow: ellipsis; }
+
+    /* Profile card */
+    .profile-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-md);
+      border-radius: var(--radius); padding: 20px 24px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .profile-stat { display: flex; flex-direction: column; gap: 2px; }
+    .profile-stat .stat-label {
+      font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .5px;
+      color: var(--text-sec);
+    }
+    .profile-stat .stat-value {
+      font-size: 22px; font-weight: 800;
+      background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .profile-stat .stat-sub { font-size: 12px; color: var(--text-sec); }
+
+    /* Points breakdown */
+    .pts-breakdown {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      font-size: 12px;
+    }
+    .pts-chip {
+      background: rgba(255,255,255,.06); border: 1px solid var(--border);
+      border-radius: 20px; padding: 4px 10px;
+      font-weight: 600; color: var(--text-sec);
+    }
+    .pts-chip span { color: var(--orange); }
+
+    /* Phase tabs */
+    .phase-tabs {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-bottom: 16px;
+    }
+    .phase-tab {
+      padding: 6px 14px; border-radius: 20px;
+      border: 1.5px solid var(--border-md);
+      background: transparent; color: var(--text-sec);
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+    }
+    .phase-tab:hover { border-color: var(--orange); color: var(--orange); }
+    .phase-tab.active {
+      background: var(--grad); color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 12px rgba(231,98,12,.3);
+    }
+
+    /* Matches table */
+    .matches-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 12px;
+    }
+    .matches-table th {
+      background: rgba(255,255,255,.04); color: var(--text-sec);
+      padding: 8px 12px; text-align: left;
+      font-weight: 700; font-size: 11px;
+      letter-spacing: .4px; text-transform: uppercase;
+      border-bottom: 1px solid var(--border-md);
+    }
+    .matches-table td {
+      padding: 10px 12px; border-bottom: 1px solid var(--border);
+      vertical-align: middle; color: var(--text-body);
+    }
+    .matches-table tr:last-child td { border-bottom: none; }
+
+    /* Row states */
+    .row-pending td { color: var(--text-sec); }
+    .row-exact   td { border-left: 3px solid #22c55e; }
+    .row-winner  td { border-left: 3px solid var(--gold); }
+    .row-miss    td { border-left: 3px solid #ef4444; }
+
+    .badge-pts {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 10px; font-weight: 700; font-size: 11px;
+    }
+    .badge-exact  { background: rgba(34,197,94,.18); color: #86efac; }
+    .badge-winner { background: rgba(228,180,64,.18); color: #fde68a; }
+    .badge-miss   { background: rgba(239,68,68,.18); color: #fca5a5; }
+    .badge-pending{ background: rgba(255,255,255,.08); color: var(--text-sec); }
+
+    .score-display {
+      font-weight: 700; font-size: 13px; color: var(--text);
+    }
+    .score-vs { color: var(--text-sec); font-size: 11px; margin: 0 4px; }
+
+    /* Scroll wrapper for tables */
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* Puntos especiales card */
+    .especiales-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px; margin-top: 8px;
+    }
+    .especial-card {
+      background: var(--bg-card); border: 1px solid var(--border-md);
+      border-radius: var(--radius-sm); padding: 16px;
+    }
+    .especial-card .ec-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .4px;
+      color: var(--text-sec); margin-bottom: 4px;
+    }
+    .especial-card .ec-pron {
+      font-weight: 700; font-size: 15px; color: var(--text);
+    }
+    .especial-card .ec-pts {
+      margin-top: 6px; font-size: 12px; font-weight: 600;
+    }
+    .ec-correct { color: #86efac; }
+    .ec-wrong   { color: #fca5a5; }
+    .ec-pending { color: var(--text-sec); }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer {
+      background: var(--bg-alt);
+      border-top: 1px solid transparent;
+      border-image: var(--grad) 1;
+      padding: 20px 24px;
+      text-align: center; color: var(--text-sec);
+      font-size: 12px; font-weight: 500;
+    }
+    footer .footer-logo {
+      height: 28px; width: auto;
+      object-fit: contain;
+      display: block; margin: 0 auto 8px;
+      opacity: .7;
+    }
+
+    /* ── Responsive — mobile first (< 640px) ───────────────── */
+    @media (max-width: 639px) {
+
+      /* Header: logo + título en fila, botón debajo a ancho completo */
+      .header-inner {
+        flex-wrap: wrap;
+        padding: 10px 12px;
+        gap: 8px;
+        align-items: center;
+      }
+      .logo-wrap { flex-shrink: 0; }
+      .logo-wrap img { max-width: 110px; height: auto; max-height: 38px; }
+      .logo-placeholder { width: 90px; height: 36px; font-size: 10px; }
+      .header-titles { flex: 1; min-width: 0; }
+      .header-titles h1 { font-size: 16px; line-height: 1.25; }
+      .header-titles p  { font-size: 11px; }
+      .header-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        margin-top: 2px;
+      }
+      .btn-refresh { width: 100%; min-height: 44px; font-size: 14px; }
+      #last-update { text-align: center; font-size: 11px; }
+
+      /* Layout */
+      main { padding: 10px 12px 36px; gap: 14px; }
+      .section-body { padding: 12px; }
+      .section-header { padding: 12px 14px; }
+      .section-header h2 { font-size: 14px; }
+
+      /* Ranking: 3 columnas comprimidas con touch targets */
+      .ranking-table { font-size: 12px; }
+      .ranking-table td { padding: 10px 8px; }
+      .ranking-table th { padding: 8px; font-size: 11px; }
+      .ranking-table tr { min-height: 44px; }
+      .rank-pos .rp-num   { font-size: 24px; }
+      .rank-pos .rp-emoji { font-size: 15px; }
+      .names-cell  { font-size: 13px; word-break: break-word; }
+      .points-cell { white-space: nowrap; }
+      .pts-val     { font-size: 13px; }
+      .pts-label   { font-size: 10px; }
+
+      /* Autocomplete ancho completo */
+      .search-row { margin-bottom: 16px; }
+      .ac-wrap { max-width: 100%; }
+      .ac-input { font-size: 14px; }
+      .ac-dropdown { max-height: 260px; }
+
+      /* Profile card: columna vertical */
+      .profile-card {
+        grid-template-columns: 1fr;
+        padding: 14px;
+        gap: 12px;
+      }
+      .profile-stat[style*="grid-column"] { grid-column: 1 !important; }
+      .profile-stat .stat-value { font-size: 20px; }
+
+      /* Desglose de puntos: grid 3 columnas */
+      .pts-breakdown {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+      .pts-chip { text-align: center; padding: 5px 6px; font-size: 11px; }
+
+      /* Phase tabs: scroll horizontal sin wrap */
+      .phase-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+        gap: 8px;
+      }
+      .phase-tabs::-webkit-scrollbar { display: none; }
+      .phase-tab {
+        white-space: nowrap;
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+        padding: 6px 16px;
+      }
+
+      /* ── Tabla de partidos → Cards en mobile ─────────────── */
+      .table-scroll { overflow: visible; }
+
+      .matches-table thead { display: none; }
+      .matches-table,
+      .matches-table tbody { display: block; width: 100%; }
+
+      /* Cada fila es una card */
+      .matches-table tr {
+        display: grid;
+        grid-template-areas:
+          "fase  pts"
+          "teams teams"
+          "pron  result";
+        grid-template-columns: 1fr auto;
+        row-gap: 6px;
+        column-gap: 8px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--border-md);
+        margin-bottom: 10px;
+        padding: 10px 12px;
+        background: var(--bg-card);
+      }
+      .row-exact   { border-left-color: #22c55e !important; }
+      .row-winner  { border-left-color: var(--gold) !important; }
+      .row-miss    { border-left-color: #ef4444 !important; }
+      .row-pending { border-left-color: var(--border-md) !important; }
+      /* reset td border-left inside cards */
+      .row-exact td, .row-winner td, .row-miss td, .row-pending td {
+        border-left: none !important;
+      }
+
+      .matches-table td {
+        display: block;
+        padding: 0;
+        border: none;
+        font-size: 13px;
+        vertical-align: top;
+      }
+      /* Col 1: # partido — oculto en card */
+      .matches-table td:nth-child(1) { display: none; }
+      /* Col 2: Fase */
+      .matches-table td:nth-child(2) {
+        grid-area: fase;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-sec);
+        align-self: center;
+      }
+      /* Col 3: Equipos */
+      .matches-table td:nth-child(3) {
+        grid-area: teams;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 2px 0;
+        color: var(--text);
+      }
+      /* Col 4: Mi pronóstico */
+      .matches-table td:nth-child(4) { grid-area: pron; }
+      .matches-table td:nth-child(4)::before {
+        content: "Mi pronóstico  ";
+        display: block;
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        color: var(--text-sec);
+        margin-bottom: 1px;
+      }
+      /* Col 5: Resultado real */
+      .matches-table td:nth-child(5) { grid-area: result; }
+      .matches-table td:nth-child(5)::before {
+        content: "Resultado  ";
+        display: block;
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        color: var(--text-sec);
+        margin-bottom: 1px;
+      }
+      /* Col 6: Puntos badge */
+      .matches-table td:nth-child(6) {
+        grid-area: pts;
+        text-align: right;
+        align-self: start;
+      }
+
+      /* Especiales: 1 columna en mobile */
+      .especiales-grid { grid-template-columns: 1fr; gap: 10px; }
+
+      /* Footer */
+      footer { padding: 14px 12px; font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap" id="logo-wrap">
+      <img src="./assets/logo.png" alt="Novatec Solutions"
+           onerror="this.parentElement.innerHTML='<div class=\'logo-placeholder\'>logo.png</div>'" />
+    </div>
+    <div class="header-titles">
+      <h1>🏆 Polla Mundialista Novatec 2026</h1>
+      <p>Clasificación en tiempo real</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-refresh" id="btn-refresh" onclick="loadAllData()">🔄 Actualizar datos</button>
+      <span id="last-update">Sin cargar aún</span>
+    </div>
+  </div>
+  <div class="stripe"></div>
+</header>
+
+<!-- ═══════════════════════════════ MAIN ═════════════════════════════════ -->
+<main>
+
+  <!-- ── Ranking ──────────────────────────────────────────────────────── -->
+  <section class="section-card">
+    <div class="section-header">
+      <h2>🥇 Tabla de Clasificación</h2>
+    </div>
+    <div class="section-body" id="ranking-body">
+      <div class="loading-wrap"><div class="spinner"></div><p>Cargando clasificación…</p></div>
+    </div>
+  </section>
+
+  <!-- ── Mi Posición ──────────────────────────────────────────────────── -->
+  <section class="section-card">
+    <div class="section-header">
+      <h2>🔍 Mi Posición</h2>
+    </div>
+    <div class="section-body">
+      <div class="search-row">
+        <div class="ac-wrap" id="ac-wrap">
+          <div class="ac-input-row">
+            <span class="ac-icon">🔎</span>
+            <div class="ac-selected-chip" id="ac-chip">
+              <span class="chip-name" id="ac-chip-name"></span>
+            </div>
+            <input class="ac-input" id="ac-input" type="text"
+                   placeholder="Busca tu nombre…"
+                   autocomplete="off" autocorrect="off" spellcheck="false" />
+            <button class="ac-clear" id="ac-clear" aria-label="Limpiar" onclick="acClear()">×</button>
+          </div>
+          <div class="ac-dropdown" id="ac-dropdown"></div>
+        </div>
+      </div>
+      <div id="participant-detail">
+        <div class="empty-msg">⚽ Selecciona un participante para ver sus pronósticos y posición</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer>
+  <img src="./assets/logo.png" alt="Novatec" class="footer-logo"
+       onerror="this.style.display='none'" />
+  Novatec Solutions © 2026 | Polla Mundialista
+</footer>
+
+<!-- ═══════════════════════════════ SCRIPT ═══════════════════════════════ -->
+<script>
+'use strict';
+
+/* ─── Config ─────────────────────────────────────────────────────────── */
+const SHEET_ID = '1aNkKIpN1w65YvUUi6yOHlw9OO05EUYvCSqeU5nOGXiA';
+
+const SHEETS = {
+  TABLA_GENERAL:       'TABLA GENERAL',
+  PARTICIPANTES:       'PARTICIPANTES',
+  PRON_GRUPOS:         'PRONOSTICO GRUPOS',
+  PRON_16VOS:          'PRONOSTICO 16VOS',
+  PRON_8VOS:           'PRONOSTICO 8VOS',
+  PRON_CUARTOS:        'PRONOSTICO CUARTOS',
+  PRON_SEMIS:          'PRONOSTICO SEMIFINALES',
+  PRON_FINAL:          'PRONOSTICO FINAL',
+  RESULTADOS:          'RESULTADOS OFICIALES',
+  PUNTOS_ESPECIALES:   'PUNTOS ESPECIALES',
+};
+
+/* ─── State ──────────────────────────────────────────────────────────── */
+let DATA = {};   // raw rows per sheet
+
+/* ─── Fetch helper ───────────────────────────────────────────────────── */
+function fetchSheet(sheetName) {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+  return fetch(url)
+    .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.text(); })
+    .then(text => {
+      // Strip JSONP wrapper: google.visualization.Query.setResponse({...});
+      const json = text.replace(/^[^(]*\(/, '').replace(/\);\s*$/, '');
+      const obj = JSON.parse(json);
+      if (!obj.table || !obj.table.rows) return [];
+      return obj.table.rows.map(row =>
+        (row.c || []).map(cell => {
+          if (cell === null || cell === undefined) return '';
+          const v = cell.v;
+          if (v === null || v === undefined) return cell.f || '';
+          // Numeric: return as-is; else stringify
+          return v;
+        })
+      );
+    });
+}
+
+/* ─── Normalise value ────────────────────────────────────────────────── */
+function str(v) {
+  if (v === null || v === undefined) return '';
+  return String(v).trim();
+}
+function num(v) {
+  const n = parseFloat(str(v));
+  return isNaN(n) ? 0 : n;
+}
+function isNA(v) {
+  return str(v).toUpperCase() === 'NA' || str(v) === '';
+}
+
+/* ─── Main load ──────────────────────────────────────────────────────── */
+async function loadAllData() {
+  const btn = document.getElementById('btn-refresh');
+  btn.disabled = true;
+  btn.textContent = '⏳ Cargando…';
+
+  // Show spinners
+  document.getElementById('ranking-body').innerHTML =
+    '<div class="loading-wrap"><div class="spinner"></div><p>Cargando clasificación…</p></div>';
+  document.getElementById('participant-detail').innerHTML =
+    '<div class="loading-wrap"><div class="spinner"></div><p>Cargando datos…</p></div>';
+
+  try {
+    const entries = Object.entries(SHEETS);
+    const results = await Promise.allSettled(entries.map(([k, name]) => fetchSheet(name)));
+
+    results.forEach(({ status, value, reason }, i) => {
+      const key = entries[i][0];
+      if (status === 'fulfilled') {
+        DATA[key] = value;
+      } else {
+        console.warn(`Sheet ${entries[i][1]} failed:`, reason);
+        DATA[key] = [];
+      }
+    });
+
+    renderRanking();
+    renderParticipantSelect();
+
+    const now = new Date();
+    document.getElementById('last-update').textContent =
+      `Actualizado: ${now.toLocaleDateString('es-CO')} ${now.toLocaleTimeString('es-CO', {hour:'2-digit', minute:'2-digit'})}`;
+
+  } catch (err) {
+    document.getElementById('ranking-body').innerHTML =
+      `<div class="error-msg">❌ Error al cargar los datos: ${err.message}. Verifica tu conexión o que el sheet sea público.</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🔄 Actualizar datos';
+  }
+}
+
+/* ─── Ranking ────────────────────────────────────────────────────────── */
+function renderRanking() {
+  const rows = DATA.TABLA_GENERAL || [];
+  const body = document.getElementById('ranking-body');
+
+  if (!rows.length) {
+    body.innerHTML = '<div class="empty-msg">No se encontraron datos en TABLA GENERAL.</div>';
+    return;
+  }
+
+  // rows: ID(0), NOMBRE(1), GRUPOS(2), 16VOS(3), 8VOS(4), CUARTOS(5), SEMIS(6), FINAL(7), ESPECIALES(8), TOTAL(9), POSICION(10)
+  const parsed = rows
+    .filter(r => str(r[0]) !== '' && str(r[1]) !== '')
+    .map(r => ({
+      id:       str(r[0]),
+      nombre:   str(r[1]),
+      total:    num(r[9]),
+      posicion: parseInt(str(r[10]), 10) || 0,
+    }));
+
+  if (!parsed.length) {
+    body.innerHTML = '<div class="empty-msg">TABLA GENERAL no tiene participantes cargados aún.</div>';
+    return;
+  }
+
+  // Group by position (read from sheet directly)
+  const byPos = {};
+  parsed.forEach(p => {
+    if (!byPos[p.posicion]) byPos[p.posicion] = { posicion: p.posicion, nombres: [], total: p.total };
+    byPos[p.posicion].nombres.push(p.nombre);
+    if (p.total > byPos[p.posicion].total) byPos[p.posicion].total = p.total;
+  });
+
+  // Sort by position ascending, keep only top 10 distinct positions
+  const sorted = Object.values(byPos)
+    .sort((a, b) => a.posicion - b.posicion)
+    .slice(0, 10);
+
+  const rankClass = pos => pos === 1 ? 'rank-1' : pos === 2 ? 'rank-2' : pos === 3 ? 'rank-3' : 'rank-n';
+  const medalEmoji = pos => pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : '';
+
+  const rows_html = sorted.map(g => {
+    const nombresHtml = g.nombres
+      .map(n => `<span>${n}</span>`)
+      .join(`<span class="names-separator"> · </span>`);
+    const emoji = medalEmoji(g.posicion);
+    return `
+      <tr class="${rankClass(g.posicion)}">
+        <td style="width:72px; text-align:center; padding:14px 10px">
+          <div class="rank-pos">
+            ${emoji ? `<span class="rp-emoji">${emoji}</span>` : ''}
+            <span class="rp-num">${g.posicion}</span>
+          </div>
+        </td>
+        <td class="names-cell" style="padding:14px">${nombresHtml}</td>
+        <td class="points-cell" style="padding:14px 16px 14px 14px"><span class="pts-val">${g.total}</span><span class="pts-label">pts</span></td>
+      </tr>`;
+  }).join('');
+
+  body.innerHTML = `
+    <div class="table-scroll">
+      <table class="ranking-table">
+        <thead>
+          <tr>
+            <th style="text-align:center">Puesto</th>
+            <th>Participante(s)</th>
+            <th style="text-align:right; padding-right:16px">Puntos</th>
+          </tr>
+        </thead>
+        <tbody>${rows_html}</tbody>
+      </table>
+    </div>`;
+}
+
+/* ─── Autocomplete ───────────────────────────────────────────────────── */
+let AC_PARTS   = [];   // full participant list [{id, nombre, area}]
+let AC_SEL_ID  = '';   // currently selected participant id
+let AC_FOCUSED = -1;   // keyboard nav index in dropdown
+
+/* Normalize string: lowercase + strip diacritics */
+function acNorm(s) {
+  return str(s).toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '');
+}
+
+/* Highlight matched characters in name */
+function acHighlight(name, query) {
+  if (!query) return escHtml(name);
+  const normName  = acNorm(name);
+  const normQuery = acNorm(query);
+  const idx = normName.indexOf(normQuery);
+  if (idx === -1) return escHtml(name);
+  return escHtml(name.slice(0, idx))
+    + '<mark>' + escHtml(name.slice(idx, idx + query.length)) + '</mark>'
+    + escHtml(name.slice(idx + query.length));
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function acOpen(items, query) {
+  const dd = document.getElementById('ac-dropdown');
+  AC_FOCUSED = -1;
+  if (!items.length) {
+    dd.innerHTML = '<div class="ac-empty">No se encontró ningún participante</div>';
+  } else {
+    dd.innerHTML = items.slice(0, 8).map((p, i) => `
+      <div class="ac-item" data-id="${escHtml(p.id)}" data-idx="${i}"
+           onmousedown="acSelect('${escHtml(p.id)}')"
+           onmouseover="acFocus(${i})">
+        <span class="ac-item-name">${acHighlight(p.nombre, query)}</span>
+        ${p.area ? `<span class="ac-item-area">📍 ${escHtml(p.area)}</span>` : ''}
+      </div>`).join('');
+  }
+  dd.classList.add('open');
+}
+
+function acClose() {
+  document.getElementById('ac-dropdown').classList.remove('open');
+  AC_FOCUSED = -1;
+}
+
+function acFocus(idx) {
+  AC_FOCUSED = idx;
+  document.querySelectorAll('#ac-dropdown .ac-item').forEach((el, i) => {
+    el.classList.toggle('focused', i === idx);
+  });
+}
+
+function acSelect(id) {
+  const p = AC_PARTS.find(x => x.id === id);
+  if (!p) return;
+  AC_SEL_ID = id;
+
+  /* Show chip, hide input */
+  const input = document.getElementById('ac-input');
+  const chip  = document.getElementById('ac-chip');
+  const chipName = document.getElementById('ac-chip-name');
+  const clearBtn = document.getElementById('ac-clear');
+
+  input.value = '';
+  input.style.display = 'none';
+  chipName.textContent = p.nombre;
+  chip.classList.add('visible');
+  clearBtn.classList.add('visible');
+  acClose();
+  showParticipant(id);
+}
+
+function acClear() {
+  AC_SEL_ID = '';
+  const input   = document.getElementById('ac-input');
+  const chip    = document.getElementById('ac-chip');
+  const clearBtn = document.getElementById('ac-clear');
+
+  chip.classList.remove('visible');
+  clearBtn.classList.remove('visible');
+  input.style.display = '';
+  input.value = '';
+  input.focus();
+  acClose();
+  document.getElementById('participant-detail').innerHTML =
+    '<div class="empty-msg">⚽ Selecciona un participante para ver sus pronósticos y posición</div>';
+}
+
+function acInit() {
+  const input = document.getElementById('ac-input');
+  const dd    = document.getElementById('ac-dropdown');
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+    if (q.length < 2) { acClose(); return; }
+    const normQ = acNorm(q);
+    const matches = AC_PARTS.filter(p => acNorm(p.nombre).includes(normQ));
+    acOpen(matches, q);
+  });
+
+  input.addEventListener('keydown', e => {
+    if (!dd.classList.contains('open')) return;
+    const items = dd.querySelectorAll('.ac-item');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      acFocus(Math.min(AC_FOCUSED + 1, items.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      acFocus(Math.max(AC_FOCUSED - 1, 0));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (AC_FOCUSED >= 0 && items[AC_FOCUSED]) {
+        acSelect(items[AC_FOCUSED].dataset.id);
+      }
+    } else if (e.key === 'Escape') {
+      acClose();
+    }
+  });
+
+  /* Close on outside click */
+  document.addEventListener('mousedown', e => {
+    if (!document.getElementById('ac-wrap').contains(e.target)) acClose();
+  });
+}
+
+/* ─── Participant Select — now populates AC_PARTS ───────────────────── */
+function renderParticipantSelect() {
+  const prevId = AC_SEL_ID;
+
+  AC_PARTS = (DATA.PARTICIPANTES || [])
+    .filter(r => str(r[0]) !== '' && str(r[1]) !== '')
+    .map(r => ({ id: str(r[0]), nombre: str(r[1]), area: str(r[2]) }))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+
+  /* Re-select previously selected participant after data refresh */
+  if (prevId && AC_PARTS.find(p => p.id === prevId)) {
+    acSelect(prevId);
+  } else {
+    document.getElementById('participant-detail').innerHTML =
+      '<div class="empty-msg">⚽ Selecciona un participante para ver sus pronósticos y posición</div>';
+  }
+}
+
+/* ─── Show Participant Detail ─────────────────────────────────────────── */
+function showParticipant(participantId) {
+  const detail = document.getElementById('participant-detail');
+  if (!participantId) {
+    detail.innerHTML = '<div class="empty-msg">⚽ Selecciona un participante para ver sus pronósticos y posición</div>';
+    return;
+  }
+
+  const pid = str(participantId);
+
+  // Get from PARTICIPANTES
+  const partRow = (DATA.PARTICIPANTES || []).find(r => str(r[0]) === pid);
+  const nombre = partRow ? str(partRow[1]) : pid;
+  const area   = partRow ? str(partRow[2]) : '—';
+
+  // Get from TABLA GENERAL
+  // Cols: ID(0), NOMBRE(1), GRUPOS(2), 16VOS(3), 8VOS(4), CUARTOS(5), SEMIS(6), FINAL(7), ESPECIALES(8), TOTAL(9), POSICION(10)
+  const tgRow = (DATA.TABLA_GENERAL || []).find(r => str(r[0]) === pid);
+  const ptGrupos   = tgRow ? num(tgRow[2]) : 0;
+  const pt16vos    = tgRow ? num(tgRow[3]) : 0;
+  const pt8vos     = tgRow ? num(tgRow[4]) : 0;
+  const ptCuartos  = tgRow ? num(tgRow[5]) : 0;
+  const ptSemis    = tgRow ? num(tgRow[6]) : 0;
+  const ptFinal    = tgRow ? num(tgRow[7]) : 0;
+  const ptEspecial = tgRow ? num(tgRow[8]) : 0;
+  const ptTotal    = tgRow ? num(tgRow[9]) : 0;
+  const posicion   = tgRow ? (parseInt(str(tgRow[10]), 10) || 0) : 0;
+
+  const posDisplay = posicion === 1 ? '🥇 1°' : posicion === 2 ? '🥈 2°' : posicion === 3 ? '🥉 3°' : posicion > 0 ? `#${posicion}` : '—';
+
+  // Count exact vs winner from groups
+  let exactCount = 0, winnerCount = 0;
+  const pronGrupos = getPronosticoRows(pid, DATA.PRON_GRUPOS);
+  pronGrupos.forEach(p => {
+    if (num(p.puntos) === 3) exactCount++;
+    else if (num(p.puntos) === 1) winnerCount++;
+  });
+
+  // Puntos especiales
+  const espRow = (DATA.PUNTOS_ESPECIALES || []).find(r => str(r[0]) === pid);
+
+  /* ── Profile card ── */
+  const profileHtml = `
+    <div class="profile-card">
+      <div class="profile-stat">
+        <span class="stat-label">Participante</span>
+        <span class="stat-value" style="font-size:17px">${nombre}</span>
+        <span class="stat-sub">📍 ${area}</span>
+      </div>
+      <div class="profile-stat">
+        <span class="stat-label">Posición</span>
+        <span class="stat-value">${posDisplay}</span>
+        <span class="stat-sub">en el ranking</span>
+      </div>
+      <div class="profile-stat">
+        <span class="stat-label">Total puntos</span>
+        <span class="stat-value">${ptTotal}</span>
+        <span class="stat-sub">🎯 ${exactCount} exactos · ✅ ${winnerCount} ganadores</span>
+      </div>
+      <div class="profile-stat" style="grid-column: 1/-1">
+        <span class="stat-label">Desglose de puntos</span>
+        <div class="pts-breakdown" style="margin-top:6px">
+          <span class="pts-chip">Grupos <span>${ptGrupos}</span></span>
+          <span class="pts-chip">16vos <span>${pt16vos}</span></span>
+          <span class="pts-chip">8vos <span>${pt8vos}</span></span>
+          <span class="pts-chip">Cuartos <span>${ptCuartos}</span></span>
+          <span class="pts-chip">Semis <span>${ptSemis}</span></span>
+          <span class="pts-chip">Final <span>${ptFinal}</span></span>
+          <span class="pts-chip">Especiales <span>${ptEspecial}</span></span>
+        </div>
+      </div>
+    </div>`;
+
+  /* ── Matches per phase ── */
+  const phases = [
+    { key: 'GRUPOS',       label: 'Grupos',       data: DATA.PRON_GRUPOS },
+    { key: '16VOS',        label: '16vos',        data: DATA.PRON_16VOS },
+    { key: '8VOS',         label: '8vos',         data: DATA.PRON_8VOS },
+    { key: 'CUARTOS',      label: 'Cuartos',      data: DATA.PRON_CUARTOS },
+    { key: 'SEMIFINALES',  label: 'Semis',        data: DATA.PRON_SEMIS },
+    { key: 'FINAL',        label: 'Final',        data: DATA.PRON_FINAL },
+  ];
+
+  /* Phase tabs */
+  const tabsHtml = phases.map((ph, i) =>
+    `<button class="phase-tab${i === 0 ? ' active' : ''}" onclick="switchPhase(this,'tab-${ph.key}')">${ph.label}</button>`
+  ).join('');
+
+  /* Phase panels */
+  const panelsHtml = phases.map((ph, i) => {
+    const rows = getPronosticoRows(pid, ph.data);
+    let content;
+    if (!rows.length) {
+      content = `<div class="empty-msg">⏳ Pronósticos pendientes para esta fase</div>`;
+    } else {
+      const rowsHtml = rows.map(p => buildMatchRow(p)).join('');
+      content = `
+        <div class="table-scroll">
+          <table class="matches-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Fase</th>
+                <th>Partido</th>
+                <th>Mi pronóstico</th>
+                <th>Resultado real</th>
+                <th>Pts</th>
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        </div>`;
+    }
+    return `<div id="tab-${ph.key}" class="phase-panel" style="display:${i===0?'block':'none'}">${content}</div>`;
+  }).join('');
+
+  /* ── Puntos especiales ── */
+  const espHtml = buildEspecialesCard(espRow);
+
+  detail.innerHTML = profileHtml + `
+    <h3 style="font-size:14px;font-weight:700;color:var(--gray);margin-bottom:12px">⚽ Pronósticos por partido</h3>
+    <div class="phase-tabs">${tabsHtml}</div>
+    ${panelsHtml}
+    <h3 style="font-size:14px;font-weight:700;color:var(--gray);margin:24px 0 12px">⭐ Puntos especiales</h3>
+    ${espHtml}
+  `;
+}
+
+/* Switch phase tab */
+function switchPhase(btn, panelId) {
+  btn.closest('.section-body').querySelectorAll('.phase-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  btn.closest('.section-body').querySelectorAll('.phase-panel').forEach(p => p.style.display = 'none');
+  document.getElementById(panelId).style.display = 'block';
+}
+
+/* ─── Get pronóstico rows for a participant ──────────────────────────── */
+// Pronostico cols: ID PARTICIPANTE(0), NOMBRE(1), ID PARTIDO(2),
+//   EQUIPO LOCAL(3), EQUIPO VISITA(4), PRON LOCAL(5), PRON VISITA(6),
+//   RESULTADO PRON(7), PUNTOS(8), FECHA REGISTRO(9)
+function getPronosticoRows(pid, sheetRows) {
+  if (!sheetRows || !sheetRows.length) return [];
+  return sheetRows
+    .filter(r => str(r[0]) === pid && str(r[2]) !== '')
+    .map(r => {
+      const idPartido    = str(r[2]);
+      const eqLocal      = str(r[3]);
+      const eqVisita     = str(r[4]);
+      const pronLocal    = str(r[5]);
+      const pronVisita   = str(r[6]);
+      const puntos       = str(r[8]);
+
+      // Find result in RESULTADOS OFICIALES
+      // Cols: ID PARTIDO(0), FASE(1), EQ LOCAL(2), EQ VISITA(3), GOLES LOCAL(4), GOLES VISITA(5), RESULTADO(6)
+      const resRow = (DATA.RESULTADOS || []).find(rr => str(rr[0]) === idPartido);
+      const fase         = resRow ? str(resRow[1]) : '';
+      const golesLocal   = resRow ? str(resRow[4]) : 'NA';
+      const golesVisita  = resRow ? str(resRow[5]) : 'NA';
+      const resultado    = resRow ? str(resRow[6]) : 'NA';
+
+      return { idPartido, eqLocal, eqVisita, pronLocal, pronVisita,
+               puntos, fase, golesLocal, golesVisita, resultado };
+    });
+}
+
+/* ─── Build a match row ──────────────────────────────────────────────── */
+function buildMatchRow(p) {
+  const pending = isNA(p.golesLocal) || isNA(p.golesVisita);
+  const pts = num(p.puntos);
+
+  let rowClass, badgeClass, badgeText, resultHtml;
+
+  if (pending) {
+    rowClass   = 'row-pending';
+    badgeClass = 'badge-pending';
+    badgeText  = '⏳ —';
+    resultHtml = '<span style="color:#9ca3af">⏳ Pendiente</span>';
+  } else {
+    resultHtml = `<span class="score-display">${p.golesLocal}<span class="score-vs">-</span>${p.golesVisita}</span>`;
+    if (pts >= 3) {
+      rowClass = 'row-exact';  badgeClass = 'badge-exact';  badgeText = '🎯 3';
+    } else if (pts === 1) {
+      rowClass = 'row-winner'; badgeClass = 'badge-winner'; badgeText = '✅ 1';
+    } else {
+      rowClass = 'row-miss';   badgeClass = 'badge-miss';   badgeText = '❌ 0';
+    }
+  }
+
+  const pronHtml = (p.pronLocal !== '' && p.pronVisita !== '')
+    ? `<span class="score-display">${p.pronLocal}<span class="score-vs">-</span>${p.pronVisita}</span>`
+    : '<span style="color:#9ca3af">—</span>';
+
+  return `
+    <tr class="${rowClass}">
+      <td style="width:40px;font-weight:600;color:var(--gray)">${p.idPartido}</td>
+      <td style="font-size:11px;color:var(--gray)">${p.fase}</td>
+      <td><strong>${p.eqLocal}</strong> <span style="color:var(--gray)">vs</span> <strong>${p.eqVisita}</strong></td>
+      <td class="td-pron">${pronHtml}</td>
+      <td class="td-result">${resultHtml}</td>
+      <td style="white-space:nowrap"><span class="badge-pts ${badgeClass}">${badgeText}</span></td>
+    </tr>`;
+}
+
+/* ─── Puntos especiales ──────────────────────────────────────────────── */
+// Cols: ID(0), NOMBRE(1), CAMPEON PRON(2), GOLEADOR PRON(3), GUANTE ORO PRON(4),
+//       PTS CAMPEON(5), PTS GOLEADOR(6), PTS GUANTE ORO(7)
+function buildEspecialesCard(row) {
+  if (!row) return '<div class="empty-msg">No se encontraron puntos especiales para este participante.</div>';
+
+  const items = [
+    { icon: '🏆', label: 'Campeón', pron: str(row[2]), pts: num(row[5]) },
+    { icon: '⚽', label: 'Goleador',  pron: str(row[3]), pts: num(row[6]) },
+    { icon: '🥊', label: 'Guante de Oro', pron: str(row[4]), pts: num(row[7]) },
+  ];
+
+  const cards = items.map(item => {
+    let ptsHtml;
+    if (item.pts > 0) {
+      ptsHtml = `<span class="ec-correct">✅ ${item.pts} pts</span>`;
+    } else if (item.pron === '') {
+      ptsHtml = `<span class="ec-pending">Sin pronóstico</span>`;
+    } else {
+      ptsHtml = `<span class="ec-pending">⏳ Por definir</span>`;
+    }
+    return `
+      <div class="especial-card">
+        <div class="ec-label">${item.icon} ${item.label}</div>
+        <div class="ec-pron">${item.pron || '—'}</div>
+        <div class="ec-pts">${ptsHtml}</div>
+      </div>`;
+  }).join('');
+
+  return `<div class="especiales-grid">${cards}</div>`;
+}
+
+/* ─── Auto-load on page ready ────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  acInit();
+  loadAllData();
+});
+</script>
+</body>
+</html>
