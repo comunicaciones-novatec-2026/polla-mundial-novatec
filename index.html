@@ -812,22 +812,22 @@ function renderRanking() {
     return;
   }
 
-  // rows: ID(0), NOMBRE(1), GRUPOS(2), 16VOS(3), 8VOS(4), CUARTOS(5), SEMIS(6), FINAL(7), ESPECIALES(8), TOTAL(9), POSICION(10)
-  const parsed = rows
-    .filter(r => str(r[0]) !== '' && str(r[1]) !== '')
+  // Skip header row, filter empty names, read columns directly
+  const parsed = rows.slice(1)
+    .filter(r => r[1] !== undefined && str(r[1]) !== '')
     .map(r => ({
-      id:       str(r[0]),
       nombre:   str(r[1]),
-      total:    num(r[9]),
+      total:    parseInt(str(r[9]), 10) || 0,
       posicion: parseInt(str(r[10]), 10) || 0,
-    }));
+    }))
+    .filter(r => r.posicion > 0);
 
   if (!parsed.length) {
     body.innerHTML = '<div class="empty-msg">TABLA GENERAL no tiene participantes cargados aún.</div>';
     return;
   }
 
-  // Group by position (read from sheet directly)
+  // Group by POSICION RANKING from sheet, sort groups ascending
   const byPos = {};
   parsed.forEach(p => {
     if (!byPos[p.posicion]) byPos[p.posicion] = { posicion: p.posicion, nombres: [], total: p.total };
@@ -835,10 +835,8 @@ function renderRanking() {
     if (p.total > byPos[p.posicion].total) byPos[p.posicion].total = p.total;
   });
 
-  // Sort by position ascending, keep only top 10 distinct positions
   const sorted = Object.values(byPos)
-    .sort((a, b) => a.posicion - b.posicion)
-    .slice(0, 10);
+    .sort((a, b) => a.posicion - b.posicion);
 
   const rankClass = pos => pos === 1 ? 'rank-1' : pos === 2 ? 'rank-2' : pos === 3 ? 'rank-3' : 'rank-n';
   const medalEmoji = pos => pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : '';
