@@ -816,13 +816,13 @@ function renderRanking() {
   const parsed = rows
     .filter(r => {
       const nombre = str(r[1]);
-      const pos = parseInt(str(r[10]), 10);
+      const pos = Math.round(parseFloat(str(r[10])));
       return nombre !== '' && nombre.toUpperCase() !== 'NOMBRE' && pos > 0;
     })
     .map(r => ({
       nombre:   str(r[1]),
-      total:    parseInt(str(r[9]), 10) || 0,
-      posicion: parseInt(str(r[10]), 10),
+      total:    Math.round(parseFloat(str(r[9]))) || 0,
+      posicion: Math.round(parseFloat(str(r[10]))),
     }));
 
   if (!parsed.length) {
@@ -1051,7 +1051,7 @@ function showParticipant(participantId) {
   const ptFinal    = tgRow ? num(tgRow[7]) : 0;
   const ptEspecial = tgRow ? num(tgRow[8]) : 0;
   const ptTotal    = tgRow ? num(tgRow[9]) : 0;
-  const posicion   = tgRow ? (parseInt(str(tgRow[10]), 10) || 0) : 0;
+  const posicion   = tgRow ? (Math.round(parseFloat(str(tgRow[10]))) || 0) : 0;
 
   const posDisplay = posicion === 1 ? '🥇 1°' : posicion === 2 ? '🥈 2°' : posicion === 3 ? '🥉 3°' : posicion > 0 ? `#${posicion}` : '—';
 
