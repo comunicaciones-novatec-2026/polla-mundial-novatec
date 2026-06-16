@@ -812,15 +812,18 @@ function renderRanking() {
     return;
   }
 
-  // Skip header row, filter empty names, read columns directly
-  const parsed = rows.slice(1)
-    .filter(r => r[1] !== undefined && str(r[1]) !== '')
+  // Process all rows; skip header-like rows and rows without valid position
+  const parsed = rows
+    .filter(r => {
+      const nombre = str(r[1]);
+      const pos = parseInt(str(r[10]), 10);
+      return nombre !== '' && nombre.toUpperCase() !== 'NOMBRE' && pos > 0;
+    })
     .map(r => ({
       nombre:   str(r[1]),
       total:    parseInt(str(r[9]), 10) || 0,
-      posicion: parseInt(str(r[10]), 10) || 0,
-    }))
-    .filter(r => r.posicion > 0);
+      posicion: parseInt(str(r[10]), 10),
+    }));
 
   if (!parsed.length) {
     body.innerHTML = '<div class="empty-msg">TABLA GENERAL no tiene participantes cargados aún.</div>';
