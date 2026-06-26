@@ -1105,12 +1105,12 @@ function showParticipant(participantId) {
 
   /* ── Matches per phase ── */
   const phases = [
-    { key: 'GRUPOS',       label: 'Grupos',       data: DATA.PRON_GRUPOS },
-    { key: '16VOS',        label: '16vos',        data: DATA.PRON_16VOS },
-    { key: '8VOS',         label: '8vos',         data: DATA.PRON_8VOS },
-    { key: 'CUARTOS',      label: 'Cuartos',      data: DATA.PRON_CUARTOS },
-    { key: 'SEMIFINALES',  label: 'Semis',        data: DATA.PRON_SEMIS },
-    { key: 'FINAL',        label: 'Final',        data: DATA.PRON_FINAL },
+    { key: 'GRUPOS',       label: 'Grupos',  data: DATA.PRON_GRUPOS,  puntosIdx: 8  },
+    { key: '16VOS',        label: '16vos',   data: DATA.PRON_16VOS,   puntosIdx: 10 },
+    { key: '8VOS',         label: '8vos',    data: DATA.PRON_8VOS,    puntosIdx: 10 },
+    { key: 'CUARTOS',      label: 'Cuartos', data: DATA.PRON_CUARTOS, puntosIdx: 10 },
+    { key: 'SEMIFINALES',  label: 'Semis',   data: DATA.PRON_SEMIS,   puntosIdx: 10 },
+    { key: 'FINAL',        label: 'Final',   data: DATA.PRON_FINAL,   puntosIdx: 10 },
   ];
 
   /* Phase tabs */
@@ -1120,7 +1120,7 @@ function showParticipant(participantId) {
 
   /* Phase panels */
   const panelsHtml = phases.map((ph, i) => {
-    const rows = getPronosticoRows(pid, ph.data);
+    const rows = getPronosticoRows(pid, ph.data, ph.puntosIdx);
     let content;
     if (!rows.length) {
       content = `<div class="empty-msg">⏳ Pronósticos pendientes para esta fase</div>`;
@@ -1162,11 +1162,11 @@ function switchPhase(btn, panelId) {
 }
 
 /* ─── Get pronóstico rows for a participant ──────────────────────────── */
-// Pronostico cols: ID PARTICIPANTE(0), NOMBRE(1), ID PARTIDO(2),
-//   EQUIPO LOCAL(3), EQUIPO VISITA(4), PRON LOCAL(5), PRON VISITA(6),
-//   RESULTADO PRON(7), PUNTOS(8), FECHA REGISTRO(9)
-function getPronosticoRows(pid, sheetRows) {
+// GRUPOS cols: ..., RESULTADO PRON(7), PUNTOS(8), FECHA(9)
+// 16VOS–FINAL cols: ..., RESULTADO PRON(7), T.EXTRA(8), PENALES(9), PUNTOS(10), FECHA(11)
+function getPronosticoRows(pid, sheetRows, puntosIdx) {
   if (!sheetRows || !sheetRows.length) return [];
+  const pi = puntosIdx || 8;
   return sheetRows
     .filter(r => str(r[0]) === pid && str(r[2]) !== '')
     .map(r => {
@@ -1175,7 +1175,7 @@ function getPronosticoRows(pid, sheetRows) {
       const eqVisita     = str(r[4]);
       const pronLocal    = str(r[5]);
       const pronVisita   = str(r[6]);
-      const puntos       = str(r[8]);
+      const puntos       = str(r[pi]);
 
       // Find result in RESULTADOS OFICIALES
       // Cols: ID PARTIDO(0), FASE(1), EQ LOCAL(2), EQ VISITA(3), GOLES LOCAL(4), GOLES VISITA(5), RESULTADO(6)
