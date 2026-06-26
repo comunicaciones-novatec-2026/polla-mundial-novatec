@@ -1175,7 +1175,7 @@ function getPronosticoRows(pid, sheetRows, puntosIdx) {
       const eqVisita     = str(r[4]);
       const pronLocal    = str(r[5]);
       const pronVisita   = str(r[6]);
-      const puntos       = str(r[pi]);
+const puntos       = str(r[pi]);
 
       // Find result in RESULTADOS OFICIALES
       // Cols: ID PARTIDO(0), FASE(1), EQ LOCAL(2), EQ VISITA(3), GOLES LOCAL(4), GOLES VISITA(5), RESULTADO(6)
@@ -1204,12 +1204,12 @@ function buildMatchRow(p) {
     resultHtml = '<span style="color:#9ca3af">⏳ Pendiente</span>';
   } else {
     resultHtml = `<span class="score-display">${p.golesLocal}<span class="score-vs">-</span>${p.golesVisita}</span>`;
-    if (pts >= 3) {
-      rowClass = 'row-exact';  badgeClass = 'badge-exact';  badgeText = '🎯 3';
+    if (pts > 1) {
+      rowClass = 'row-exact';  badgeClass = 'badge-exact';  badgeText = `🎯 ${pts}`;
     } else if (pts === 1) {
-      rowClass = 'row-winner'; badgeClass = 'badge-winner'; badgeText = '✅ 1';
+      rowClass = 'row-winner'; badgeClass = 'badge-winner'; badgeText = `✅ ${pts}`;
     } else {
-      rowClass = 'row-miss';   badgeClass = 'badge-miss';   badgeText = '❌ 0';
+      rowClass = 'row-miss';   badgeClass = 'badge-miss';   badgeText = `❌ ${pts}`;
     }
   }
 
